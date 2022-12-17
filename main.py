@@ -4,6 +4,7 @@ from pygame import mixer
 from lib.display import Display
 from lib.clock import Clock
 from lib.Car import Car
+from lib.draw import draw_bg, draw_text, draw_health_bar
 from lib.road import Road
 from lib.Menu import MainMenu
 
@@ -16,29 +17,6 @@ def play_music_bg(music_bg):
     mixer.music.play(-1)
 
 
-# метод для написания текста
-def draw_text(text, font, text_color, x, y):
-    img = font.render(text, True, text_color)
-    display.screen.blit(img, (x, y))
-
-
-# function for drawing bg
-def draw_bg(bg):
-    scaled_bg = pygame.transform.scale(bg, (display.screen_width, display.screen_height))
-    display.screen.blit(scaled_bg, (0, 0))
-
-
-# function to draw health bars
-def draw_health_bar(health, x, y):
-    ratio = health / 100
-    pygame.draw.rect(display.screen, (255, 255, 255), (x - 2, y - 2, 404 * display.scr_w, 34 * display.scr_h))
-    pygame.draw.rect(display.screen, (255, 0, 0), (x, y, 400 * display.scr_w, 30 * display.scr_h))
-    pygame.draw.rect(display.screen, (100, 0, 0), (x, y + 15, 400 * display.scr_w, 15 * display.scr_h))
-    pygame.draw.rect(display.screen, (250, 200, 0), (x, y, 400 * ratio * display.scr_w, 30 * display.scr_h))
-    pygame.draw.rect(display.screen, (195, 155, 0), (x, y + 20, 400 * ratio * display.scr_w, 10 * display.scr_h))
-    pygame.draw.rect(display.screen, (255, 255, 0), (x, y, 400 * ratio * display.scr_w, 10 * display.scr_h))
-
-
 def restart_round():
     global player, road
     player = Car(display)
@@ -46,19 +24,23 @@ def restart_round():
 
 
 def drive(car):
-    global score, game_on, highest_score
+    global score, highest_score, game_on
     draw_bg(bg_road)
 
     draw_text(f"SCORE: {score}", font, (255, 255, 255), 50 * display.scr_w, 200 * display.scr_h)
+    if score < highest_score:
+        draw_text(f"HIGHEST IN: {highest_score - score}", font, (255, 255, 255), 50 * display.scr_w, 250 * display.scr_h)
     if player.alive:
         score += 1
+        if score % 500 == 0:
+            road.speed += 1
     else:
         game_on = False
         game_menu.enable()
+        restart_round()
         if highest_score < score:
             highest_score = score
-            score = 0
-            restart_round()
+        score = 0
     # show players stats
     draw_health_bar(car.health, 20 * display.scr_w, 20 * display.scr_h)
     # draw player
