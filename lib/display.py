@@ -6,6 +6,8 @@ class Display():
         # Нативное разрешение пользователя
         self.screen_width = windll.user32.GetSystemMetrics(0)
         self.screen_height = windll.user32.GetSystemMetrics(1)
+        # self.screen_width = 1600
+        # self.screen_height = 900
 
         # Разрешение экрана для pygame
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))

@@ -8,8 +8,8 @@ class Road:
         self.car = car
         self.speed = 5
         self.rect = pygame.Rect((500 * display.scr_w, 0, 920 * display.scr_w, display.screen_height))
-        self.obstacle1 = Obstacles(display, random.randrange(500, 1420 - 200), car)
-        self.obstacle2 = Obstacles(display, random.randrange(500, 1420 - 200), car)
+        self.obstacle1 = Obstacles(display, random.randrange(int(500 * display.scr_w), int((1420 - 200) * display.scr_w)), car)
+        self.obstacle2 = Obstacles(display, random.randrange(int(500 * display.scr_w), int((1420 - 200) * display.scr_w)), car)
         self.line_list = []
         for i in range(4):
             roadline = RoadLine(display, 0 + (i * 300 * display.scr_h), car, self.speed)
@@ -25,8 +25,8 @@ class Road:
             self.obstacle1.draw(self.display.screen)
             self.obstacle2.draw(self.display.screen)
         else:
-            self.obstacle1 = Obstacles(self.display, random.randrange(500, 1420 - 200), self.car)
-            self.obstacle2 = Obstacles(self.display, random.randrange(500, 1420 - 200), self.car)
+            self.obstacle1 = Obstacles(self.display, random.randrange(int(500 * self.display.scr_w), int((1420 - 200) * self.display.scr_w)), self.car)
+            self.obstacle2 = Obstacles(self.display, random.randrange(int(500 * self.display.scr_w), int((1420 - 200) * self.display.scr_w)), self.car)
 
 
 class Obstacles:
@@ -54,7 +54,7 @@ class Obstacles:
 class RoadLine:
     def __init__(self, display, y, target, speed):
         self.display = display
-        self.rect = pygame.Rect((940, y - 200, 50 * display.scr_w, 100 * display.scr_h))
+        self.rect = pygame.Rect((940 * display.scr_w, y - 200, 50 * display.scr_w, 100 * display.scr_h))
         self.target = target
 
     def move(self, speed):
