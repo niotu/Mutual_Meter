@@ -43,7 +43,7 @@ class Button:
 
 
 class MainMenu:
-    def __init__(self, scr_w, scr_h, bg, font):
+    def __init__(self, scr_w, scr_h, bg, font, logo):
         self.start_button = Button("START", font,
                                    (400 * scr_w, 200 * scr_h),
                                    (1200 * scr_w, 800 * scr_h))
@@ -51,23 +51,23 @@ class MainMenu:
                                   (400 * scr_w, 200 * scr_h),
                                   (400 * scr_w, 800 * scr_h))
         self.shop_button = Button("SHOP", font,
-                                  (400 * scr_w, 200 * scr_h),
-                                  (400 * scr_w, 400 * scr_h))
+                                  (400 * scr_w, 100 * scr_h),
+                                  (1470 * scr_w, 50 * scr_h))
+        self.logo = logo
         self.bg = bg
         self.enabled = True
-        self.is_hide = False
 
     def show(self):
-        if not self.is_hide:
-            scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
-            display.screen.blit(scaled_bg, (0, 0))
-
-            self.start_button.show()
-            self.exit_button.show()
-            self.exit_button.click()
-            self.start_button.click()
-            self.shop_button.show()
-            self.shop_button.click()
+        scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
+        display.screen.blit(scaled_bg, (0, 0))
+        scaled_logo = pygame.transform.scale(self.logo, (display.screen_width, display.screen_height))
+        display.screen.blit(scaled_logo, (0, 0))
+        self.start_button.show()
+        self.exit_button.show()
+        self.exit_button.click()
+        self.start_button.click()
+        self.shop_button.show()
+        self.shop_button.click()
 
     def is_enabled(self):
         return self.enabled
@@ -77,12 +77,6 @@ class MainMenu:
 
     def enable(self):
         self.enabled = True
-
-    def hide(self):
-        self.is_hide = True
-
-    def show_(self):
-        self.is_hide = False
 
 
 class ShopMenu:
@@ -98,26 +92,24 @@ class ShopMenu:
                                   (50 * scr_w, 50 * scr_h))
         self.bg = bg
         self.enabled = False
-        self.is_hide = False
 
-    def show(self, money):
-        if not self.is_hide:
-            scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
-            display.screen.blit(scaled_bg, (0, 0))
+    def show(self, money, car):
+        scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
+        display.screen.blit(scaled_bg, (0, 0))
+        car.update()
+        car.draw(display.screen)
 
-            self.red_car.show()
-
-            self.police_car.show()
-            self.back_button.show()
-            self.back_button.click()
-            self.red_car.click()
-            if self.police_car.bought:
-                self.police_car.text = "POLICE"
+        self.red_car.show()
+        self.police_car.show()
+        self.back_button.show()
+        self.back_button.click()
+        self.red_car.click()
+        if self.police_car.bought:
+            self.police_car.text = "POLICE"
+            self.police_car.click()
+        else:
+            if money >= 200:
                 self.police_car.click()
-            else:
-                if money >= 200:
-                    self.police_car.click()
-
 
     def is_enabled(self):
         return self.enabled

@@ -66,6 +66,7 @@ clocks = Clock()
 
 # Загрузка картинок
 bg_road = pygame.image.load(r"assets\images\backgrounds\road.png").convert_alpha()
+logo = pygame.image.load(r"assets\images\mutual_meter.png").convert_alpha()
 red_car_sheet = pygame.image.load(r"assets\images\sprites\car_sprite_sheet.png").convert_alpha()
 police_car_sheet = pygame.image.load(r"assets\images\sprites\car_police_sprite_sheet.png").convert_alpha()
 
@@ -83,7 +84,7 @@ CAR_ANIMATION_STEPS = [3, 3]
 # Загрузка классов
 player = Car(display, CAR_DATA, red_car_sheet, CAR_ANIMATION_STEPS)
 road = Road(display, player)
-game_menu = MainMenu(display.scr_w, display.scr_h, bg_road, font)
+game_menu = MainMenu(display.scr_w, display.scr_h, bg_road, font, logo)
 shop_menu = ShopMenu(display.scr_w, display.scr_h, bg_road, font)
 
 game_on = False
@@ -104,7 +105,7 @@ while run:
             run = False
     if game_menu.is_enabled():
         game_menu.show()
-        draw_text(f"HIGHEST SCORE: {highest_score}", font, (255, 255, 255), 810 * display.scr_w, 300 * display.scr_h)
+        draw_text(f"HIGHEST SCORE: {highest_score}", font, (255, 255, 255), 810 * display.scr_w, 520 * display.scr_h)
         if game_menu.exit_button.is_clicked():
             run = False
         if game_menu.start_button.is_clicked():
@@ -114,7 +115,7 @@ while run:
             shop_menu.enable()
             game_menu.disable()
     if shop_menu.is_enabled():
-        shop_menu.show(money)
+        shop_menu.show(money, player)
         draw_text(f"{money}$", font, (255, 255, 255), 810 * display.scr_w, 300 * display.scr_h)
         if shop_menu.back_button.is_clicked():
             shop_menu.disable()

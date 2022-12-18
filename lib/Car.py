@@ -21,6 +21,7 @@ class Car:
         self.hit_cooldown = 80
 
     def change_skin(self, skin):
+        self.sprite_sheet = skin
         self.animation_list = self.load_images(skin, self.animation_steps)
 
     def move(self):
