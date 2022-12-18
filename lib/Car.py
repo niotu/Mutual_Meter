@@ -7,6 +7,7 @@ class Car:
         self.size = data[0]
         self.image_scale = data[1]
         self.offset = data[2]
+        self.animation_steps = animation_steps
         self.animation_list = self.load_images(sprite_sheet, animation_steps)
         self.action = 0  # 0 - idle, 1 - hit
         self.frame_index = 0
@@ -17,6 +18,9 @@ class Car:
         self.rect = pygame.Rect((900, 700, 150 * display.scr_w, 200 * display.scr_h))
         self.display = display
         self.hit_cooldown = 80
+
+    def change_skin(self, skin):
+        self.animation_list = self.load_images(skin, self.animation_steps)
 
     def move(self):
         SPEED = 12

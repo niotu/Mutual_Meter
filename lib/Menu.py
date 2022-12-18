@@ -3,6 +3,7 @@ from lib.display import Display
 
 display = Display()
 
+
 class Button:
     """Create a button, then blit the surface in the while loop"""
 
@@ -15,6 +16,7 @@ class Button:
         self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
         self.surface = pygame.Surface(self.size)
         self.change_text(text)
+        self.bought = False
         self.render = None
 
     def change_text(self, text, bg="white"):
@@ -43,11 +45,14 @@ class Button:
 class MainMenu:
     def __init__(self, scr_w, scr_h, bg, font):
         self.start_button = Button("START", font,
-            (400 * scr_w, 200 * scr_h),
-            (1200 * scr_w, 800 * scr_h))
+                                   (400 * scr_w, 200 * scr_h),
+                                   (1200 * scr_w, 800 * scr_h))
         self.exit_button = Button("EXIT", font,
-            (400 * scr_w, 200 * scr_h),
-            (400 * scr_w, 800 * scr_h))
+                                  (400 * scr_w, 200 * scr_h),
+                                  (400 * scr_w, 800 * scr_h))
+        self.shop_button = Button("SHOP", font,
+                                  (400 * scr_w, 200 * scr_h),
+                                  (400 * scr_w, 400 * scr_h))
         self.bg = bg
         self.enabled = True
         self.is_hide = False
@@ -61,7 +66,8 @@ class MainMenu:
             self.exit_button.show()
             self.exit_button.click()
             self.start_button.click()
-
+            self.shop_button.show()
+            self.shop_button.click()
 
     def is_enabled(self):
         return self.enabled
@@ -77,3 +83,47 @@ class MainMenu:
 
     def show_(self):
         self.is_hide = False
+
+
+class ShopMenu:
+    def __init__(self, scr_w, scr_h, bg, font):
+        self.red_car = Button("RED", font,
+                              (400 * scr_w, 200 * scr_h),
+                              (400 * scr_w, 400 * scr_h))
+        self.police_car = Button("200 $", font,
+                                 (400 * scr_w, 200 * scr_h),
+                                 (1200 * scr_w, 400 * scr_h))
+        self.back_button = Button("BACK", font,
+                                  (400 * scr_w, 100 * scr_h),
+                                  (50 * scr_w, 50 * scr_h))
+        self.bg = bg
+        self.enabled = False
+        self.is_hide = False
+
+    def show(self, money):
+        if not self.is_hide:
+            scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
+            display.screen.blit(scaled_bg, (0, 0))
+
+            self.red_car.show()
+
+            self.police_car.show()
+            self.back_button.show()
+            self.back_button.click()
+            self.red_car.click()
+            if self.police_car.bought:
+                self.police_car.text = "POLICE"
+                self.police_car.click()
+            else:
+                if money >= 200:
+                    self.police_car.click()
+
+
+    def is_enabled(self):
+        return self.enabled
+
+    def disable(self):
+        self.enabled = False
+
+    def enable(self):
+        self.enabled = True
