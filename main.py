@@ -19,7 +19,8 @@ def play_music_bg(music_bg):
 
 def restart_round():
     global player, road
-    player = Car(display, CAR_DATA, red_car_sheet, CAR_ANIMATION_STEPS)
+    sheet = player.sprite_sheet
+    player = Car(display, CAR_DATA, sheet, CAR_ANIMATION_STEPS)
     road = Road(display, player)
 
 

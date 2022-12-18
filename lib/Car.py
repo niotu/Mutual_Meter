@@ -8,6 +8,7 @@ class Car:
         self.image_scale = data[1]
         self.offset = data[2]
         self.animation_steps = animation_steps
+        self.sprite_sheet = sprite_sheet
         self.animation_list = self.load_images(sprite_sheet, animation_steps)
         self.action = 0  # 0 - idle, 1 - hit
         self.frame_index = 0

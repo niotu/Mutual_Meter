@@ -18,7 +18,7 @@ class Display():
         self.get_screen()
 
         # Заголовок окна
-        self.set_caption("Великолепное Издание 2: В сердце Японии")
+        self.set_caption("Mutual Meter")
         
     def get_screen(self):
         return self.screen
