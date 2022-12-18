@@ -19,33 +19,36 @@ def play_music_bg(music_bg):
 
 def restart_round():
     global player, road
-    player = Car(display)
+    player = Car(display, CAR_DATA, car_sheet, CAR_ANIMATION_STEPS)
     road = Road(display, player)
 
 
 def drive(car):
-    global score, highest_score, game_on
+    global score, highest_score, game_on, score_speed
     draw_bg(bg_road)
 
-    draw_text(f"SCORE: {score}", font, (255, 255, 255), 50 * display.scr_w, 200 * display.scr_h)
-    if score < highest_score:
-        draw_text(f"HIGHEST IN: {highest_score - score}", font, (255, 255, 255), 50 * display.scr_w, 250 * display.scr_h)
+    draw_text(f"SCORE: {score // 10}", font, (255, 255, 255), 50 * display.scr_w, 200 * display.scr_h)
+    if score // 10 < highest_score:
+        draw_text(f"HIGHEST IN: {highest_score - score // 10}", font, (255, 255, 255), 50 * display.scr_w, 250 * display.scr_h)
     if player.alive:
-        score += 1
+        score += score_speed
         if score % 500 == 0:
             road.speed += 1
+            score_speed += 1
     else:
         game_on = False
         game_menu.enable()
         restart_round()
-        if highest_score < score:
-            highest_score = score
+        if highest_score < score // 10:
+            highest_score = score // 10
         score = 0
+        score_speed = 1
     # show players stats
     draw_health_bar(car.health, 20 * display.scr_w, 20 * display.scr_h)
     # draw player
     road.generate()
     player.move()
+    player.update()
     player.draw(display.screen)
 
 
@@ -61,17 +64,26 @@ clocks = Clock()
 
 # Загрузка картинок
 bg_road = pygame.image.load(r"assets\images\backgrounds\road.png").convert_alpha()
+car_sheet = pygame.image.load(r"assets\images\sprites\car_sprite_sheet.png").convert_alpha()
 
 # шрифт
 font = pygame.font.SysFont('Times New Roman', 40)
 
+# параметры картинки
+CAR_SIZE = 650
+CAR_SCALE = 1 * display.scr_w
+CAR_OFFSET = [227, 168]
+CAR_DATA = [CAR_SIZE, CAR_SCALE, CAR_OFFSET]
+CAR_ANIMATION_STEPS = [3, 3]
+
 # Загрузка классов
-player = Car(display)
+player = Car(display, CAR_DATA, car_sheet, CAR_ANIMATION_STEPS)
 road = Road(display, player)
 game_menu = MainMenu(display.scr_w, display.scr_h, bg_road, font)
 
 game_on = False
 score = 0
+score_speed = 1
 highest_score = 0
 
 # Луп игры
