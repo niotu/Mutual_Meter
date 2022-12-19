@@ -1,9 +1,9 @@
 import pygame
-
+from const.CONSTANTS import *
 
 class Car:
     def __init__(self, display, data, sprite_sheet, animation_steps):
-        self.health = 100
+        self.health = HEALTH
         self.size = data[0]
         self.image_scale = data[1]
         self.offset = data[2]
@@ -25,7 +25,6 @@ class Car:
         self.animation_list = self.load_images(skin, self.animation_steps)
 
     def move(self):
-        SPEED = 12
         dx = 0
         key = pygame.key.get_pressed()
         if key[pygame.K_a]:

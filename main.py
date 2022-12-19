@@ -1,4 +1,5 @@
 import pygame
+import json
 
 from pygame import mixer
 from lib.display import Display
@@ -7,7 +8,7 @@ from lib.Car import Car
 from lib.draw import draw_bg, draw_text, draw_health_bar
 from lib.road import Road
 from lib.Menu import MainMenu, ShopMenu
-
+from lib.storage import Storage
 
 # метод для проигрывания музыки
 def play_music_bg(music_bg):
@@ -15,7 +16,6 @@ def play_music_bg(music_bg):
     mixer.music.load(music_bg)
     mixer.music.set_volume(0.2)
     mixer.music.play(-1)
-
 
 def restart_round():
     global player, road
@@ -25,6 +25,7 @@ def restart_round():
 
 
 def drive(car):
+
     global score, highest_score, game_on, score_speed, money
     draw_bg(bg_road)
     draw_text(f"$: {(score // 100) + money}", font, (255, 255, 255), 50 * display.scr_w, 150 * display.scr_h)
@@ -86,12 +87,19 @@ player = Car(display, CAR_DATA, red_car_sheet, CAR_ANIMATION_STEPS)
 road = Road(display, player)
 game_menu = MainMenu(display.scr_w, display.scr_h, bg_road, font, logo)
 shop_menu = ShopMenu(display.scr_w, display.scr_h, bg_road, font)
+storage = Storage()
 
 game_on = False
-score = 0
 score_speed = 1
-highest_score = 0
-money = 0
+
+def set_scores():
+    stor = storage.get_storage()
+    score = stor.get('score')
+    highest_score = stor.get('highest_score')
+    money = stor.get('money')
+    return score, highest_score, money
+
+score, highest_score, money = set_scores()
 
 # Луп игры
 run = True
@@ -137,4 +145,5 @@ while run:
     # Обновление кадра дисплея
     pygame.display.update()
 
+storage.save_data()
 pygame.quit()
