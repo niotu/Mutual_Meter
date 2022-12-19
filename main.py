@@ -1,5 +1,4 @@
 import pygame
-import json
 
 from pygame import mixer
 from lib.display import Display
