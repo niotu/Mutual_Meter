@@ -15,10 +15,13 @@ class Car:
         self.image = self.animation_list[self.action][self.frame_index]
         self.update_time = pygame.time.get_ticks()
         self.hit = False
+        self.moving = False
         self.alive = True
-        self.rect = pygame.Rect((900, 700, 150 * display.scr_w, 200 * display.scr_h))
+        self.rect = pygame.Rect((880, 700, 150 * display.scr_w, 200 * display.scr_h))
         self.display = display
         self.hit_cooldown = 80
+        self.coloumn = 0
+        self.direction = 0
 
     def change_skin(self, skin):
         self.sprite_sheet = skin
@@ -27,23 +30,35 @@ class Car:
     def move(self):
         dx = 0
         key = pygame.key.get_pressed()
-        if key[pygame.K_a]:
-            dx = -SPEED
-        if key[pygame.K_d]:
-            dx = SPEED
-
-        if self.rect.left + dx < (500 * self.display.scr_w):
-            dx = -self.rect.left + (500 * self.display.scr_w)
-        if self.rect.right + dx > self.display.screen_width - (500 * self.display.scr_w):
-            dx = self.display.screen_width - (500 * self.display.scr_w) - self.rect.right
+        if not self.moving:
+            if key[pygame.K_a]:
+                if self.coloumn != -1:
+                    self.direction = -1
+                    self.coloumn -= 1
+                    self.moving = True
+            if key[pygame.K_d]:
+                if self.coloumn != 1:
+                    self.direction = 1
+                    self.coloumn += 1
+                    self.moving = True
 
         # update player position
-        self.rect.x += dx
+        if self.moving:
+            match self.direction:
+                case -1:
+                    dx -= SPEED
+                case 1:
+                    dx = SPEED
+            self.rect.x += dx
+            if self.rect.x == 880 + 300 * self.coloumn:
+                self.moving = False
+
         if self.hit_cooldown > 0:
             self.hit_cooldown -= 1
         # check if player alive
         if self.health <= 0:
             self.alive = False
+
 
     def update(self):
         if not self.hit:
