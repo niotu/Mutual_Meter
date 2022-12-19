@@ -1,9 +1,1 @@
-{
-  "score": 0,
-  "highest_score": 0,
-  "money": 0,
-  "bought_cars": [
-    "red_car"
-  ],
-  "current_car_index": 0
-}
+{"score": 0, "highest_score": 0, "money": 0, "bought_cars": ["red_car"], "current_car_index": 0}

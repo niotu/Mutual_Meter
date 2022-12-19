@@ -67,7 +67,7 @@ clocks = Clock()
 # Загрузка картинок
 bg_road = pygame.image.load(r"assets\images\backgrounds\road.png").convert_alpha()
 logo = pygame.image.load(r"assets\images\mutual_meter.png").convert_alpha()
-red_car_sheet = pygame.image.load(r"assets\images\sprites\car_sprite_sheet.png").convert_alpha()
+red_car_sheet = pygame.image.load(r"assets\images\car_sprites\car_sprite_sheet.png").convert_alpha()
 police_car_sheet = pygame.image.load(r"assets\images\sprites\car_police_sprite_sheet.png").convert_alpha()
 
 
