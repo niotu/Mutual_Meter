@@ -1,15 +1,13 @@
 import pygame
 from const.CONSTANTS import *
 
+
 class Car:
-    def __init__(self, display, data, sprite_sheet, animation_steps):
+    def __init__(self, display, data, sprite_sheet):
         self.health = HEALTH
-        self.size = data[0]
-        self.image_scale = data[1]
-        self.offset = data[2]
-        self.animation_steps = animation_steps
+        self.size, self.image_scale, self.offset, self.animation_steps = data[0], data[1], data[2], data[3]
         self.sprite_sheet = sprite_sheet
-        self.animation_list = self.load_images(sprite_sheet, animation_steps)
+        self.animation_list = self.load_images(sprite_sheet, self.animation_steps)
         self.action = 0  # 0 - idle, 1 - hit
         self.frame_index = 0
         self.image = self.animation_list[self.action][self.frame_index]
@@ -17,9 +15,9 @@ class Car:
         self.hit = False
         self.moving = False
         self.alive = True
-        self.rect = pygame.Rect((880, 700, 150 * display.scr_w, 200 * display.scr_h))
+        self.rect = pygame.Rect((880 * display.scr_w, 700 * display.scr_h, 150 * display.scr_w, 200 * display.scr_h))
         self.display = display
-        self.hit_cooldown = 80
+        self.hit_cooldown = 0
         self.coloumn = 0
         self.direction = 0
 
@@ -36,7 +34,7 @@ class Car:
                     self.direction = -1
                     self.coloumn -= 1
                     self.moving = True
-            if key[pygame.K_d]:
+            elif key[pygame.K_d]:
                 if self.coloumn != 1:
                     self.direction = 1
                     self.coloumn += 1
@@ -50,7 +48,7 @@ class Car:
                 case 1:
                     dx = SPEED
             self.rect.x += dx
-            if self.rect.x == 880 + 300 * self.coloumn:
+            if self.rect.x == (880 + 300 * self.coloumn) * self.display.scr_w:
                 self.moving = False
 
         if self.hit_cooldown > 0:
@@ -58,7 +56,6 @@ class Car:
         # check if player alive
         if self.health <= 0:
             self.alive = False
-
 
     def update(self):
         if not self.hit:

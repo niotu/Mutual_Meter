@@ -22,7 +22,7 @@ class Button:
     def change_text(self, text, bg="white"):
         self.render = self.font.render(text, 1, pygame.Color("Black"))
         self.surface.fill(bg)
-        self.surface.blit(self.render, (self.width // 2 - 50, self.height // 2 - 30))
+        self.surface.blit(self.render, (self.width // 2 - 70, self.height // 2 - 30))
 
     def show(self):
         self.clicked = False
