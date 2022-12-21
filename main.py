@@ -56,13 +56,13 @@ def drive(car):
     if player.hit_cooldown % 5 == 0:
         player.draw(display.screen)
 
-
 def set_scores():
     stor = storage.get_storage()
-    score = stor.get('score')
     highest_score = stor.get('highest_score')
     money = stor.get('money')
-    return score, highest_score, money
+    return int(highest_score), int(money)
+
+score = 0
 
 
 # Инициализация
@@ -105,7 +105,7 @@ storage = Storage()
 game_on = False
 score_speed = 1
 
-score, highest_score, money = set_scores()
+highest_score, money = set_scores()
 
 # Луп игры
 run = True
@@ -129,6 +129,7 @@ while run:
             shop_menu.enable()
             game_menu.disable()
     if shop_menu.is_enabled():
+        '''enter the shop'''
         shop_menu.show(money, player)
         draw_text(f"{money}$", font, (255, 255, 255), 810 * display.scr_w, 300 * display.scr_h)
         if shop_menu.back_button.is_clicked():
@@ -151,5 +152,5 @@ while run:
     # Обновление кадра дисплея
     pygame.display.update()
 
-storage.save_data()
+storage.save_data(highest_score, money, [])
 pygame.quit()

@@ -69,6 +69,9 @@ class MainMenu:
         self.shop_button.show()
         self.shop_button.click()
 
+    def update_animation(self):
+        pass
+
     def is_enabled(self):
         return self.enabled
 
