@@ -15,10 +15,10 @@ class Car:
         self.hit = False
         self.moving = False
         self.alive = True
-        self.rect = pygame.Rect((880 * display.scr_w, 700 * display.scr_h, 150 * display.scr_w, 200 * display.scr_h))
+        self.rect = pygame.Rect((880 * SCREEN_WIDTH, 700 * SCREEN_HEIGHT, 150 * SCREEN_WIDTH, 200 * SCREEN_HEIGHT))
         self.display = display
         self.hit_cooldown = 0
-        self.coloumn = 0
+        self.column = 0
         self.direction = 0
 
     def change_skin(self, skin):
@@ -30,14 +30,14 @@ class Car:
         key = pygame.key.get_pressed()
         if not self.moving:
             if key[pygame.K_a]:
-                if self.coloumn != -1:
+                if self.column != -1:
                     self.direction = -1
-                    self.coloumn -= 1
+                    self.column -= 1
                     self.moving = True
             elif key[pygame.K_d]:
-                if self.coloumn != 1:
+                if self.column != 1:
                     self.direction = 1
-                    self.coloumn += 1
+                    self.column += 1
                     self.moving = True
 
         # update player position
@@ -48,7 +48,7 @@ class Car:
                 case 1:
                     dx = SPEED
             self.rect.x += dx
-            if self.rect.x == (880 + 300 * self.coloumn) * self.display.scr_w:
+            if self.rect.x == (880 + 300 * self.column) * SCREEN_WIDTH:
                 self.moving = False
 
         if self.hit_cooldown > 0:
