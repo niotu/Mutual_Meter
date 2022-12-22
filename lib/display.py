@@ -1,6 +1,6 @@
 import pygame
 from ctypes import windll
-
+from const.CONSTANTS import *
 class Display():
     def __init__(self):
         # Нативное разрешение пользователя
@@ -27,3 +27,23 @@ class Display():
 
     def set_caption(self, caption):
         pygame.display.set_caption(caption)
+
+    # function for drawing text
+    def draw_text(self, text, font, text_color, x, y):
+        img = font.render(text, True, text_color)
+        self.screen.blit(img, (x, y))
+
+    # function for drawing bg
+    def draw_bg(self, bg):
+        scaled_bg = pygame.transform.scale(bg, (self.screen_width, self.screen_height))
+        self.screen.blit(scaled_bg, (0, 0))
+
+    # function to draw health bars
+    def draw_health_bar(self, health, x, y):
+        ratio = health / 100
+        pygame.draw.rect(self.screen, (255, 255, 255), (x - 2, y - 2, 404 * SCREEN_WIDTH, 34 * SCREEN_HEIGNT))
+        pygame.draw.rect(self.screen, (255, 0, 0), (x, y, 400 * SCREEN_WIDTH, 30 * SCREEN_HEIGHT))
+        pygame.draw.rect(self.screen, (100, 0, 0), (x, y + 15, 400 * SCREEN_WIDTH, 15 * SCREEN_HEIGHT))
+        pygame.draw.rect(self.screen, (250, 200, 0), (x, y, 400 * ratio * SCREEN_WIDTH, 30 * SCREEN_HEIGHT))
+        pygame.draw.rect(self.screen, (195, 155, 0), (x, y + 20, 400 * ratio * SCREEN_WIDTH, 10 * SCREEN_HEIGHT))
+        pygame.draw.rect(self.screen, (255, 255, 0), (x, y, 400 * ratio * SCREEN_WIDTH, 10 * SCREEN_HEIGHT))
