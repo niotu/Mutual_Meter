@@ -1,6 +1,8 @@
 import pygame
-from ctypes import windll
+
 from const.CONSTANTS import *
+
+
 class Display():
     def __init__(self):
         # Нативное разрешение пользователя
@@ -21,7 +23,7 @@ class Display():
 
         # Заголовок окна
         self.set_caption("Mutual Meter")
-        
+
     def get_screen(self):
         return self.screen
 
@@ -41,7 +43,7 @@ class Display():
     # function to draw health bars
     def draw_health_bar(self, health, x, y):
         ratio = health / 100
-        pygame.draw.rect(self.screen, (255, 255, 255), (x - 2, y - 2, 404 * SCREEN_WIDTH, 34 * SCREEN_HEIGNT))
+        pygame.draw.rect(self.screen, (255, 255, 255), (x - 2, y - 2, 404 * SCREEN_WIDTH, 34 * SCREEN_HEIGHT))
         pygame.draw.rect(self.screen, (255, 0, 0), (x, y, 400 * SCREEN_WIDTH, 30 * SCREEN_HEIGHT))
         pygame.draw.rect(self.screen, (100, 0, 0), (x, y + 15, 400 * SCREEN_WIDTH, 15 * SCREEN_HEIGHT))
         pygame.draw.rect(self.screen, (250, 200, 0), (x, y, 400 * ratio * SCREEN_WIDTH, 30 * SCREEN_HEIGHT))

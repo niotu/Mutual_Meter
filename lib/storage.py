@@ -1,22 +1,42 @@
 import json
 
 
+def load_current_car():
+    with open('storage/scores.json', 'r') as scores:
+        storage = json.load(scores)
+    return storage['current_car_index']
+
+def load_bought_cars():
+    with open('storage/scores.json', 'r') as scores:
+        storage = json.load(scores)
+    return storage['bought_cars']
+
+
+def load_data():
+    with open('storage/scores.json', 'r', encoding='utf-8') as scores:
+        storage = json.load(scores)
+    highest_score = storage.get('highest_score')
+    money = storage.get('money')
+    return storage, highest_score, money
+
+
 class Storage:
     def __init__(self):
         self.storage = None
         self.highest_score = None
-        self.bought_cars = None
-        self.current_car_index = None
         self.money = None
-        self.storage, self.highest_score, self.money = self.load_data()
+        self.bought_cars = load_bought_cars()
+        self.current_car_tag = self.bought_cars[int(load_current_car())]
+        self.storage, self.highest_score, self.money = load_data()
 
-    def load_data(self):
-        with open('storage/scores.json', 'r', encoding='utf-8') as scores:
-            storage = json.load(scores)
-        highest_score = storage.get('highest_score')
-        money = storage.get('money')
-        bought_cars = storage.get('bought_cars')
-        return storage, highest_score, money
+    def get_current_car(self):
+        return self.current_car_tag
+
+    def get_current_car_index(self):
+        return int(load_current_car())
+
+    def get_bought_cars(self):
+        return self.bought_cars
 
     def get_storage(self):
         return self.storage
@@ -28,9 +48,6 @@ class Storage:
 
     def set_highest(self, score):
         self.highest_score = score
-
-    def set_score(self, score):
-        self.score = score
 
     def set_money(self, money):
         self.money = money
