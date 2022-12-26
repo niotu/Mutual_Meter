@@ -43,11 +43,9 @@ class Game:
         self.score = 0
         self.current_skin_index = self.storage.get_current_car_index()
         self.cars = ['red_car',
-                     # Car(self.display, CAR_DATA, 'green_car', True),
-                     # Car(self.display, CAR_DATA, 'brown_car', True),
+                     'green_car',
+                     'brown_car',
                      'police_car']
-
-
 
         self.player = Car(self.display, CAR_DATA, self.cars[self.current_skin_index], True)
         self.highest_score, self.money = self.load_scores()
@@ -61,8 +59,6 @@ class Game:
         self.game_menu = MainMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.logo)
         self.shop_menu = ShopMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.bought_cars,
                                   self.player)
-
-
 
     # метод для проигрывания музыки
     def play_music_bg(self, music_bg):

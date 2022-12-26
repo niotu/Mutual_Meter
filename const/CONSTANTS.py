@@ -17,4 +17,6 @@ FPS = 60
 TICKS = 50
 
 TAGS_TO_LINKS = {'red_car': r"assets\images\pixel_sprites\car_sprites\car_sprite_sheet.png",
+                 'green_car': r'assets\images\pixel_sprites\car_sprites\car_green_sprite_sheet.png',
+                 'brown_car': r'assets\images\pixel_sprites\car_sprites\car_brown_sprite_sheet.png',
                  'police_car': r"assets\images\pixel_sprites\car_police_sprite_sheet.png"}
