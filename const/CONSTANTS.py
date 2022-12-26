@@ -15,3 +15,6 @@ CAR_DATA = [CAR_SIZE, CAR_SCALE, CAR_OFFSET, [3, 3]]
 
 FPS = 60
 TICKS = 50
+
+TAGS_TO_LINKS = {'red_car': r"assets\images\pixel_sprites\car_sprites\car_sprite_sheet.png",
+                 'police_car': r"assets\images\pixel_sprites\car_police_sprite_sheet.png"}

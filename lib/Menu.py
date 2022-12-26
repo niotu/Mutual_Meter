@@ -1,4 +1,7 @@
+import json
+
 import pygame
+
 from lib.display import Display
 
 display = Display()
@@ -16,7 +19,7 @@ class Button:
         self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
         self.surface = pygame.Surface(self.size)
         self.change_text(text)
-        self.bought = False
+        # self.bought = False
         self.render = None
 
     def change_text(self, text, bg="white"):
@@ -83,36 +86,59 @@ class MainMenu:
 
 
 class ShopMenu:
-    def __init__(self, scr_w, scr_h, bg, font):
-        self.red_car = Button("RED", font,
-                              (400 * scr_w, 200 * scr_h),
-                              (400 * scr_w, 400 * scr_h))
-        self.police_car = Button("200 $", font,
-                                 (400 * scr_w, 200 * scr_h),
-                                 (1200 * scr_w, 400 * scr_h))
+    def __init__(self, scr_w, scr_h, bg, font, price_list, curr_car):
+        self.prev_car = Button("<--", font,
+                               (400 * scr_w, 100 * scr_h),
+                               (300 * scr_w, 400 * scr_h))
+        self.next_car = Button("-->", font,
+                               (400 * scr_w, 100 * scr_h),
+                               (1200 * scr_w, 400 * scr_h))
         self.back_button = Button("BACK", font,
                                   (400 * scr_w, 100 * scr_h),
                                   (50 * scr_w, 50 * scr_h))
+        self.buy_button = Button("BUY", font,
+                                 (300 * scr_w, 100 * scr_h),
+                                 (800 * scr_w, 1000 * scr_h))
+
+        self.price_list = self.load_price_list()
+        self.shop_items = list(self.price_list.keys())
+        self.current_car = curr_car
         self.bg = bg
         self.enabled = False
 
-    def show(self, money, car):
+    def show(self):
         scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
         display.screen.blit(scaled_bg, (0, 0))
-        car.update()
-        car.draw(display.screen)
+        self.current_car.update()
+        self.current_car.draw(display.screen)
 
-        self.red_car.show()
-        self.police_car.show()
+        self.prev_car.show()
+        self.next_car.show()
+        self.buy_button.show()
         self.back_button.show()
+
         self.back_button.click()
-        self.red_car.click()
-        if self.police_car.bought:
-            self.police_car.text = "POLICE"
-            self.police_car.click()
-        else:
-            if money >= 200:
-                self.police_car.click()
+        self.next_car.click()
+        self.buy_button.click()
+        self.prev_car.click()
+
+    def change_shop_item(self, destination):
+        pass
+
+    def buy(self, money, car):
+        price = int(self.price_list[car])
+        if money >= price and not car.bought:
+            car.buy()
+            return money - price
+        else: return money
+
+    def load_price_list(self):
+        with open('storage/prices.json', 'r') as f:
+            price = json.load(f)
+        return price
+
+    def update_car(self):
+        pass
 
     def is_enabled(self):
         return self.enabled

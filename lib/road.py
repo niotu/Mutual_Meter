@@ -1,5 +1,6 @@
-import pygame
 import random
+
+import pygame
 
 from const.CONSTANTS import *
 
