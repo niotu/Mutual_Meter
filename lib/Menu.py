@@ -46,7 +46,7 @@ class Button:
 
 
 class MainMenu:
-    def __init__(self, scr_w, scr_h, bg, font, logo):
+    def __init__(self, scr_w, scr_h, bg, font, logo, bar):
         self.start_button = Button("START", font,
                                    (400 * scr_w, 200 * scr_h),
                                    (1200 * scr_w, 800 * scr_h))
@@ -59,12 +59,48 @@ class MainMenu:
         self.logo = logo
         self.bg = bg
         self.enabled = True
+        self.bar = bar
+        self.size, self.image_scale, self.offset, self.animation_steps = 450, 2, (185, 80), [20]
+        self.animation_list = self.load_images(self.bar, self.animation_steps)
+        self.frame_index = 0
+        self.image = self.animation_list[0][self.frame_index]
+        self.update_time = pygame.time.get_ticks()
+        self.rect = pygame.Rect((880 * display.scr_w, 700 * display.scr_h, 150 * display.scr_w, 200 * display.scr_h))
+
+    def load_images(self, sprite_sheet, animation_steps):
+        # extract images from sprite_sheets
+        # sprite_sheet = TAGS_TO_SKINS[sprite_sheet]
+        animation_list = []
+        for y, animation in enumerate(animation_steps):
+            temp_img_list = []
+            for x in range(animation):
+                temp_img = sprite_sheet.subsurface(x * self.size, y * self.size, self.size, self.size)
+                temp_img_list.append(
+                    pygame.transform.scale(temp_img, (self.size * self.image_scale, self.size * self.image_scale)))
+            animation_list.append(temp_img_list)
+        return animation_list
+
+    def update(self):
+        animation_cooldown = 250
+        # update image
+        self.image = self.animation_list[0][self.frame_index]
+        # check if enough time has passed sinse the last update
+        if pygame.time.get_ticks() - self.update_time > animation_cooldown:
+            self.frame_index += 1
+            self.update_time = pygame.time.get_ticks()
+        # check if the animation is finished
+        if self.frame_index >= len(self.animation_list[0]):
+            self.frame_index = 0
 
     def show(self):
         scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
         display.screen.blit(scaled_bg, (0, 0))
         scaled_logo = pygame.transform.scale(self.logo, (display.screen_width, display.screen_height))
         display.screen.blit(scaled_logo, (0, 0))
+        self.update()
+        img = pygame.transform.flip(self.image, False, False)
+        display.screen.blit(img,
+                     (self.rect.x - self.offset[0] * self.image_scale, self.rect.y - self.offset[1] * self.image_scale))
         self.start_button.show()
         self.exit_button.show()
         self.exit_button.click()
