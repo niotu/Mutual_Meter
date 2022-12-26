@@ -4,9 +4,9 @@ from const.CONSTANTS import *
 
 
 class Car:
-    def __init__(self, display, data, tag):
-        self.tag = tag
-        self.sprite_sheet = pygame.image.load(TAGS_TO_SKINS[self.tag]).convert_alpha()
+    def __init__(self, display, data, skin, bought):
+        link = TAGS_TO_LINKS[skin]
+        self.sprite_sheet = pygame.image.load(link).convert_alpha()
         self.health = HEALTH
         self.size, self.image_scale, self.offset, self.animation_steps = data[0], data[1], data[2], data[3]
         self.animation_list = self.load_images(self.sprite_sheet, self.animation_steps)
@@ -16,6 +16,7 @@ class Car:
         self.update_time = pygame.time.get_ticks()
         self.hit = False
         self.moving = False
+        self.bought = bought
         self.alive = True
         self.rect = pygame.Rect((880 * SCREEN_WIDTH, 700 * SCREEN_HEIGHT, 150 * SCREEN_WIDTH, 200 * SCREEN_HEIGHT))
         self.display = display
@@ -23,9 +24,8 @@ class Car:
         self.column = 0
         self.direction = 0
 
-    def set_skin(self, skin):
-        self.sprite_sheet = skin
-        # self.animation_list = self.load_images(skin, self.animation_steps)
+    def buy(self):
+        self.bought = True
 
     def move(self):
         dx = 0
@@ -58,6 +58,15 @@ class Car:
         # check if player alive
         if self.health <= 0:
             self.alive = False
+
+    def change_skin(self, skin):
+        link = TAGS_TO_LINKS[skin]
+        self.sprite_sheet = pygame.image.load(link).convert_alpha()
+        self.animation_list=self.load_images(self.sprite_sheet, self.animation_steps)
+
+
+    def revive(self):
+        pass
 
     def update(self):
         if not self.hit:

@@ -24,8 +24,8 @@ class Game:
         # Загрузка картинок
         self.bg_road = pygame.image.load(r"assets\images\backgrounds\road.png").convert_alpha()
         self.logo = pygame.image.load(r"assets\images\mutual_meter.png").convert_alpha()
-        self.red_car_sheet = pygame.image.load(TAGS_TO_SKINS['red_car']).convert_alpha()
-        self.police_car_sheet = pygame.image.load(TAGS_TO_SKINS['police_car']).convert_alpha()
+        self.red_car_sheet = pygame.image.load(TAGS_TO_LINKS['red_car']).convert_alpha()
+        self.police_car_sheet = pygame.image.load(TAGS_TO_LINKS['police_car']).convert_alpha()
         self.grey_car_sheet = pygame.image.load(
             r"assets\images\pixel_sprites\car_grey_sprite_sheet.png").convert_alpha()
         self.rock_sheet = pygame.image.load(r"assets\images\pixel_sprites\rock_sprite_sheet.png").convert_alpha()
@@ -41,21 +41,29 @@ class Game:
 
         self.state = 0
         self.score = 0
+        self.current_skin_index = self.storage.get_current_car_index()
+        self.cars = ['red_car',
+                     # Car(self.display, CAR_DATA, 'green_car', True),
+                     # Car(self.display, CAR_DATA, 'brown_car', True),
+                     'police_car']
 
+
+
+        self.player = Car(self.display, CAR_DATA, self.cars[self.current_skin_index], True)
         self.highest_score, self.money = self.load_scores()
         self.bought_cars = self.storage.get_bought_cars()
-        self.current_car = self.storage.get_current_car()
+        # self.current_car = self.storage.get_current_car()
 
         # Загрузка классов
-        self.player = Car(self.display, CAR_DATA, self.storage.get_current_car())
+
+        # self.player = Car(self.display, CAR_DATA, self.storage.get_current_car())
         self.road = Road(self.display, self.player, self.obstacles_sheets, [CAR_DATA, CAR_DATA])
         self.game_menu = MainMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.logo)
         self.shop_menu = ShopMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.bought_cars,
                                   self.player)
 
-    def load_shop(self, player):
-        self.shop_menu.show(self.money, player)
-        # self.player.change_skin()
+
+
     # метод для проигрывания музыки
     def play_music_bg(self, music_bg):
         mixer.stop()
@@ -64,8 +72,8 @@ class Game:
         mixer.music.play(-1)
 
     def restart_round(self):
-        sheet = self.player.sprite_sheet
-        self.player = Car(self.display, CAR_DATA, self.current_car)
+        # sheet = self.player.sprite_sheet
+        self.player.revive()
         self.road = Road(self.display, self.player, self.obstacles_sheets, [CAR_DATA, CAR_DATA, CAR_DATA])
 
     def drive(self, car):
@@ -75,9 +83,10 @@ class Game:
         self.display.draw_text(f"SCORE: {self.score // 10}", self.font, (255, 255, 255), 50 * SCREEN_WIDTH,
                                200 * SCREEN_HEIGHT)
         if self.score // 10 <= self.highest_score:
-            self.display.draw_text(f"HIGHEST IN: {self.highest_score - self.score // 10}", self.small_font, (255, 255, 255),
-                      50 * SCREEN_WIDTH,
-                      250 * SCREEN_HEIGHT)
+            self.display.draw_text(f"HIGHEST IN: {self.highest_score - self.score // 10}", self.small_font,
+                                   (255, 255, 255),
+                                   50 * SCREEN_WIDTH,
+                                   250 * SCREEN_HEIGHT)
         if self.player.alive:
             self.score += self.score_speed
             if self.score % 500 == 0:

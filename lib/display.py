@@ -3,7 +3,7 @@ import pygame
 from const.CONSTANTS import *
 
 
-class Display():
+class Display:
     def __init__(self):
         # Нативное разрешение пользователя
         self.screen_width = windll.user32.GetSystemMetrics(0)

@@ -86,7 +86,7 @@ class MainMenu:
 
 
 class ShopMenu:
-    def __init__(self, scr_w, scr_h, bg, font, bought_cars, player):
+    def __init__(self, scr_w, scr_h, bg, font, price_list, curr_car):
         self.prev_car = Button("<--", font,
                                (400 * scr_w, 100 * scr_h),
                                (300 * scr_w, 400 * scr_h))
@@ -102,16 +102,15 @@ class ShopMenu:
 
         self.price_list = self.load_price_list()
         self.shop_items = list(self.price_list.keys())
-        self.bought_cars = bought_cars
-        self.player = player
+        self.current_car = curr_car
         self.bg = bg
         self.enabled = False
 
-    def show(self, money, car):
+    def show(self):
         scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
         display.screen.blit(scaled_bg, (0, 0))
-        car.update()
-        car.draw(display.screen)
+        self.current_car.update()
+        self.current_car.draw(display.screen)
 
         self.prev_car.show()
         self.next_car.show()
@@ -122,24 +121,16 @@ class ShopMenu:
         self.next_car.click()
         self.buy_button.click()
         self.prev_car.click()
-        # if self.police_car.bought:
-        #     self.police_car.text = "POLICE"
-        #     self.police_car.click()
-        # else:
-        #     if money >= 200:
-        #         self.police_car.click()
 
     def change_shop_item(self, destination):
         pass
 
     def buy(self, money, car):
-        car = car.tag
         price = int(self.price_list[car])
-        if money >= price and car not in self.bought_cars:
-            self.bought_cars.append(car)
+        if money >= price and not car.bought:
+            car.buy()
             return money - price
-        else:
-            return money
+        else: return money
 
     def load_price_list(self):
         with open('storage/prices.json', 'r') as f:

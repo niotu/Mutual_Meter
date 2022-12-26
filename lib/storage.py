@@ -29,9 +29,6 @@ class Storage:
         self.current_car_tag = self.bought_cars[int(load_current_car())]
         self.storage, self.highest_score, self.money = load_data()
 
-    def get_current_car(self):
-        return self.current_car_tag
-
     def get_current_car_index(self):
         return int(load_current_car())
 
