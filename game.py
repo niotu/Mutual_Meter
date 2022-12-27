@@ -92,7 +92,7 @@ class Game:
             if self.score % 500 == 0:
                 self.road.speed += 1
                 self.score_speed += 1
-        elif (not self.player.alive) or self.exit_button.is_clicked():
+        elif not self.player.alive:
             self.game_on = False
             self.game_menu.enable()
             self.restart_round()

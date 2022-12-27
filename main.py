@@ -54,6 +54,16 @@ while application_run:
         #         game.player.change_skin(game.police_car_sheet)
 
     if game.game_on:
+        if game.exit_button.is_clicked():
+            game.game_on = False
+            game.game_menu.enable()
+            game.restart_round()
+            if game.highest_score < game.score // 10:
+                game.highest_score = game.score // 10
+            game.money += game.score // 100
+            game.score = 0
+            game.score_speed = 1
+
         game.drive(game.player)
 
     pygame.display.flip()
