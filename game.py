@@ -3,7 +3,7 @@ from pygame import mixer
 
 from const.CONSTANTS import *
 from lib.Car import Car
-from lib.Menu import MainMenu, ShopMenu
+from lib.Menu import MainMenu, ShopMenu, Button
 from lib.clock import Clock
 from lib.display import Display
 # from lib.draw import draw_bg, draw_text, draw_health_bar
@@ -59,6 +59,7 @@ class Game:
         self.game_menu = MainMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.logo)
         self.shop_menu = ShopMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.bought_cars,
                                   self.player)
+        self.exit_button = Button('Exit', self.font, (300, 100), (1500, 100))
 
     # метод для проигрывания музыки
     def play_music_bg(self, music_bg):
@@ -73,7 +74,10 @@ class Game:
         self.road = Road(self.display, self.player, self.obstacles_sheets, [CAR_DATA, CAR_DATA, CAR_DATA])
 
     def drive(self, car):
+        print(self.exit_button.is_clicked())
         self.display.draw_bg(self.bg_road)
+        self.exit_button.show()
+        self.exit_button.click()
         self.display.draw_text(f"$: {(self.score // 100) + self.money}", self.font, (255, 255, 255), 50 * SCREEN_WIDTH,
                                150 * SCREEN_HEIGHT)
         self.display.draw_text(f"SCORE: {self.score // 10}", self.font, (255, 255, 255), 50 * SCREEN_WIDTH,
@@ -88,7 +92,7 @@ class Game:
             if self.score % 500 == 0:
                 self.road.speed += 1
                 self.score_speed += 1
-        else:
+        elif (not self.player.alive) or self.exit_button.is_clicked():
             self.game_on = False
             self.game_menu.enable()
             self.restart_round()

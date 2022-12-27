@@ -38,11 +38,13 @@ while application_run:
             game.shop_menu.disable()
             game.game_menu.enable()
         if game.shop_menu.next_car.is_clicked():
-            game.current_skin_index = abs(game.current_skin_index + 1) % len(game.cars)
+            game.current_skin_index = (game.current_skin_index + 1) % len(game.cars)
             game.player.change_skin(game.cars[game.current_skin_index])
+            game.shop_menu.next_car.clicked = False
         if game.shop_menu.prev_car.is_clicked():
-            game.current_skin_index = abs(game.current_skin_index - 1) % len(game.cars)
+            game.current_skin_index = (game.current_skin_index - 1) % len(game.cars)
             game.player.change_skin(game.cars[game.current_skin_index])
+            game.shop_menu.prev_car.clicked = False
 
             # if game.shop_menu.police_car.bought:
         #         game.player.change_skin(game.police_car_sheet)
@@ -53,6 +55,7 @@ while application_run:
 
     if game.game_on:
         game.drive(game.player)
+
     pygame.display.flip()
 
     # Обновление кадра дисплея

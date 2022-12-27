@@ -36,8 +36,9 @@ class Button:
         x, y = pygame.mouse.get_pos()
         if self.rect.collidepoint(x, y):
             self.change_text(self.text, "red")
-            if pygame.mouse.get_pressed()[0]:
-                self.clicked = True
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONUP:
+                    self.clicked = True
         else:
             self.change_text(self.text)
 
