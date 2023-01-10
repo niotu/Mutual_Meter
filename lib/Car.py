@@ -66,7 +66,13 @@ class Car:
 
 
     def revive(self):
-        pass
+        self.rect = pygame.Rect((880 * SCREEN_WIDTH, 700 * SCREEN_HEIGHT, 150 * SCREEN_WIDTH, 200 * SCREEN_HEIGHT))
+        self.action = 0
+        self.health = 100
+        self.alive = True
+        self.hit_cooldown = 0
+        self.column = 0
+        self.direction = 0
 
     def update(self):
         if not self.hit:
