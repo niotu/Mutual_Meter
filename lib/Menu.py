@@ -33,13 +33,12 @@ class Button:
         display.screen.blit(self.surface, (self.x, self.y))
         # pygame.draw.rect(self.surface, (255, 255, 255), self.rect)
 
-    def click(self):
+    def click(self, mouse_click):
         x, y = pygame.mouse.get_pos()
         if self.rect.collidepoint(x, y):
             self.change_text(self.text, "red")
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONUP:
-                    self.clicked = True
+            if mouse_click:
+                self.clicked = True
         else:
             self.change_text(self.text)
 
@@ -62,7 +61,7 @@ class MainMenu:
         self.bg = bg
         self.enabled = True
 
-    def show(self):
+    def show(self, mouse_click):
         scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
         display.screen.blit(scaled_bg, (0, 0))
         scaled_logo = pygame.transform.scale(self.logo, (display.screen_width, display.screen_height))
@@ -70,10 +69,10 @@ class MainMenu:
         bar.draw_animated_bg()
         self.start_button.show()
         self.exit_button.show()
-        self.exit_button.click()
-        self.start_button.click()
+        self.exit_button.click(mouse_click)
+        self.start_button.click(mouse_click)
         self.shop_button.show()
-        self.shop_button.click()
+        self.shop_button.click(mouse_click)
 
     def update_animation(self):
         pass
@@ -109,7 +108,7 @@ class ShopMenu:
         self.bg = bg
         self.enabled = False
 
-    def show(self):
+    def show(self, mouse_click):
         scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
         display.screen.blit(scaled_bg, (0, 0))
         self.current_car.update()
@@ -120,10 +119,10 @@ class ShopMenu:
         self.buy_button.show()
         self.back_button.show()
 
-        self.back_button.click()
-        self.next_car.click()
-        self.buy_button.click()
-        self.prev_car.click()
+        self.back_button.click(mouse_click)
+        self.next_car.click(mouse_click)
+        self.buy_button.click(mouse_click)
+        self.prev_car.click(mouse_click)
 
     def change_shop_item(self, destination):
         pass

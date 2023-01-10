@@ -7,6 +7,7 @@ pygame.init()
 
 game = Game()
 # Луп игры
+mouse_click = False
 application_run = True
 while application_run:
     game.clocks.clock.tick(FPS)
@@ -16,8 +17,10 @@ while application_run:
     for event in events:
         if event.type == pygame.QUIT:
             application_run = False
+        if event.type == pygame.MOUSEBUTTONUP:
+            mouse_click = True
     if game.game_menu.is_enabled():
-        game.game_menu.show()
+        game.game_menu.show(mouse_click)
         game.display.draw_text(f"HIGHEST SCORE: {game.highest_score}", game.font, (255, 255, 255), 650 * SCREEN_WIDTH,
                                520 * SCREEN_HEIGHT)
         if game.game_menu.exit_button.is_clicked():
@@ -31,7 +34,7 @@ while application_run:
     if game.shop_menu.is_enabled():
         '''enter the shop'''
         # game.load_shop(game.player)
-        game.shop_menu.show()
+        game.shop_menu.show(mouse_click)
         game.display.draw_text(f"{game.money}$", game.font, (255, 255, 255), 810 * game.display.scr_w,
                                300 * game.display.scr_h)
         if game.shop_menu.back_button.is_clicked():
@@ -65,7 +68,7 @@ while application_run:
             game.score_speed = 1
 
         game.drive(game.player)
-
+    mouse_click = False
     pygame.display.flip()
 
     # Обновление кадра дисплея
