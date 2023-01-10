@@ -30,7 +30,7 @@ class Game:
             r"assets\images\pixel_sprites\car_grey_sprite_sheet.png").convert_alpha()
         self.rock_sheet = pygame.image.load(r"assets\images\pixel_sprites\rock_sprite_sheet.png").convert_alpha()
         self.sign_sheet = pygame.image.load(r"assets\images\pixel_sprites\sign_sprite_sheet.png").convert_alpha()
-
+        self.bar_sheet = pygame.image.load(r"assets\images\bar.png").convert_alpha()
         self.obstacles_sheets = [self.grey_car_sheet, self.sign_sheet, self.rock_sheet]
         # шрифт
         self.font = pygame.font.Font(r'assets\fonts\press-start\prstart.ttf', 40)
@@ -56,7 +56,8 @@ class Game:
 
         # self.player = Car(self.display, CAR_DATA, self.storage.get_current_car())
         self.road = Road(self.display, self.player, self.obstacles_sheets, [CAR_DATA, CAR_DATA])
-        self.game_menu = MainMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.logo)
+        self.game_menu = MainMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.logo,
+                                  self.bar_sheet)
         self.shop_menu = ShopMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.bought_cars,
                                   self.player)
         self.exit_button = Button('Exit', self.font, (300, 100), (1500, 100))
