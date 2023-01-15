@@ -32,8 +32,10 @@ class Game:
         self.sign_sheet = pygame.image.load(r"assets\images\pixel_sprites\sign_sprite_sheet.png").convert_alpha()
         self.obstacles_sheets = [self.grey_car_sheet, self.sign_sheet, self.rock_sheet]
         self.health_sheet = pygame.image.load(r"assets\images\pixel_sprites\boosters\heal_sheet.png").convert_alpha()
-        self.shield_sheet = pygame.image.load(r"assets\images\pixel_sprites\boosters\shield.png").convert_alpha()
+        self.shield_sheet = pygame.image.load(r"assets\images\pixel_sprites\boosters\shield_sheet.png").convert_alpha()
         self.boosters_sheets = [self.health_sheet, self.shield_sheet]
+        self.shield_sprite = pygame.image.load(r"assets\images\pixel_sprites\boosters\shield.png").convert_alpha()
+        self.heart_sprite = pygame.image.load(r"assets\images\pixel_sprites\boosters\heart.png").convert_alpha()
         # шрифт
         self.font = pygame.font.Font(r'assets\fonts\press-start\prstart.ttf', 40)
         self.small_font = pygame.font.Font(r'assets\fonts\press-start\prstart.ttf', 20)
@@ -50,13 +52,12 @@ class Game:
                      'brown_car',
                      'police_car']
 
-        self.player = Car(self.display, CAR_DATA, self.cars[self.current_skin_index], True)
         self.highest_score, self.money = self.load_scores()
         self.bought_cars = self.storage.get_bought_cars()
         # self.current_car = self.storage.get_current_car()
 
         # Загрузка классов
-
+        self.player = Car(self.display, CAR_DATA, self.cars[self.current_skin_index], True)
         # self.player = Car(self.display, CAR_DATA, self.storage.get_current_car())
         self.road = Road(self.display, self.player, (self.obstacles_sheets, self.boosters_sheets), [CAR_DATA, CAR_DATA])
         self.game_menu = MainMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.logo)
@@ -110,7 +111,9 @@ class Game:
             self.score = 0
             self.score_speed = 1
         # show players stats
-        self.display.draw_health_bar(car.health, 20 * SCREEN_WIDTH, 20 * SCREEN_HEIGHT)
+        self.display.draw_health_bar(car.health, 65 * SCREEN_WIDTH, 20 * SCREEN_HEIGHT, self.heart_sprite)
+        if car.hit_cooldown > 0:
+            self.display.draw_hit_cooldown(car.hit_cooldown * 2, self.shield_sprite)
         # draw player
         self.road.generate(self.level_score)
         self.player.move()
