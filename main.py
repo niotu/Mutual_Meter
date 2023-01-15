@@ -67,7 +67,7 @@ while application_run:
             game.score = 0
             game.score_speed = 1
 
-        game.drive(game.player)
+        game.drive(game.player, mouse_click)
     mouse_click = False
     pygame.display.flip()
 

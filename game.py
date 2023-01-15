@@ -31,6 +31,9 @@ class Game:
         self.rock_sheet = pygame.image.load(r"assets\images\pixel_sprites\rock_sprite_sheet.png").convert_alpha()
         self.sign_sheet = pygame.image.load(r"assets\images\pixel_sprites\sign_sprite_sheet.png").convert_alpha()
         self.obstacles_sheets = [self.grey_car_sheet, self.sign_sheet, self.rock_sheet]
+        self.health_sheet = pygame.image.load(r"assets\images\pixel_sprites\boosters\heal_sheet.png").convert_alpha()
+        self.shield_sheet = pygame.image.load(r"assets\images\pixel_sprites\boosters\shield.png").convert_alpha()
+        self.boosters_sheets = [self.health_sheet, self.shield_sheet]
         # шрифт
         self.font = pygame.font.Font(r'assets\fonts\press-start\prstart.ttf', 40)
         self.small_font = pygame.font.Font(r'assets\fonts\press-start\prstart.ttf', 20)
@@ -40,6 +43,7 @@ class Game:
 
         self.state = 0
         self.score = 0
+        self.level_score = 0
         self.current_skin_index = self.storage.get_current_car_index()
         self.cars = ['red_car',
                      'green_car',
@@ -54,7 +58,7 @@ class Game:
         # Загрузка классов
 
         # self.player = Car(self.display, CAR_DATA, self.storage.get_current_car())
-        self.road = Road(self.display, self.player, self.obstacles_sheets, [CAR_DATA, CAR_DATA])
+        self.road = Road(self.display, self.player, (self.obstacles_sheets, self.boosters_sheets), [CAR_DATA, CAR_DATA])
         self.game_menu = MainMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.logo)
         self.shop_menu = ShopMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.bought_cars,
                                   self.player)
@@ -70,13 +74,13 @@ class Game:
     def restart_round(self):
         # sheet = self.player.sprite_sheet
         self.player.revive()
-        self.road = Road(self.display, self.player, self.obstacles_sheets, [CAR_DATA, CAR_DATA, CAR_DATA])
+        self.road = Road(self.display, self.player, (self.obstacles_sheets, self.boosters_sheets),
+                         [CAR_DATA, CAR_DATA, CAR_DATA])
 
-    def drive(self, car):
-        print(self.exit_button.is_clicked())
+    def drive(self, car, mouse_click):
         self.display.draw_bg(self.bg_road)
         self.exit_button.show()
-        self.exit_button.click()
+        self.exit_button.click(mouse_click)
         self.display.draw_text(f"$: {(self.score // 100) + self.money}", self.font, (255, 255, 255), 50 * SCREEN_WIDTH,
                                150 * SCREEN_HEIGHT)
         self.display.draw_text(f"SCORE: {self.score // 10}", self.font, (255, 255, 255), 50 * SCREEN_WIDTH,
@@ -86,8 +90,13 @@ class Game:
                                    (255, 255, 255),
                                    50 * SCREEN_WIDTH,
                                    250 * SCREEN_HEIGHT)
+        self.display.draw_text(f"LEVEL {self.road.get_level()}", self.font,
+                               (255, 255, 255),
+                               50 * SCREEN_WIDTH,
+                               300 * SCREEN_HEIGHT)
         if self.player.alive:
             self.score += self.score_speed
+            self.level_score += 1
             if self.score % 500 == 0:
                 self.road.speed += 1
                 self.score_speed += 1
@@ -103,7 +112,7 @@ class Game:
         # show players stats
         self.display.draw_health_bar(car.health, 20 * SCREEN_WIDTH, 20 * SCREEN_HEIGHT)
         # draw player
-        self.road.generate()
+        self.road.generate(self.level_score)
         self.player.move()
         self.player.update()
         if self.player.hit_cooldown % 5 == 0:
