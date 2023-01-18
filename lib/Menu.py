@@ -188,14 +188,18 @@ class UpgradesMenu:
         self.upgrade_health_button.show()
 
         self.back_button.click(mouse_click)
-        if not lvls[0] > 9 and money >= self.costs[0]:
-            self.upgrade_shield_button.click(mouse_click)
+        if money < self.costs[0]:
+            self.upgrade_shield_button.change_text(self.upgrade_shield_button.text, "white")
         elif lvls[0] > 9:
             self.upgrade_shield_button.change_text("MAX")
-        if not lvls[1] > 9 and money >= self.costs[1]:
-            self.upgrade_health_button.click(mouse_click)
+        else:
+            self.upgrade_shield_button.click(mouse_click)
+        if money < self.costs[1]:
+            self.upgrade_health_button.change_text(self.upgrade_health_button.text, "white")
         elif lvls[1] > 9:
             self.upgrade_health_button.change_text("MAX")
+        else:
+            self.upgrade_health_button.click(mouse_click)
 
     def is_enabled(self):
         return self.enabled

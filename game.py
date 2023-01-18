@@ -79,9 +79,15 @@ class Game:
 
     def restart_round(self):
         # sheet = self.player.sprite_sheet
+        if self.highest_score < self.score // 10:
+            self.highest_score = self.score // 10
+        self.money += self.score // 100
+        self.score = 0
+        self.score_speed = 1
         self.player.revive()
         self.road = Road(self.display, self.player, (self.obstacles_sheets, self.boosters_sheets),
                          [CAR_DATA, CAR_DATA, CAR_DATA])
+
 
     def drive(self, car, mouse_click):
         self.display.draw_bg(self.bg_road)
@@ -110,11 +116,6 @@ class Game:
             self.game_on = False
             self.game_menu.enable()
             self.restart_round()
-            if self.highest_score < self.score // 10:
-                self.highest_score = self.score // 10
-            self.money += self.score // 100
-            self.score = 0
-            self.score_speed = 1
 
         # draw player
         self.road.generate(self.level_score)
