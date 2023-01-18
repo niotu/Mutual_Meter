@@ -22,6 +22,7 @@ class Button:
         self.change_text(text)
         # self.bought = False
         self.render = None
+        self.color = "white"
 
     def change_text(self, text, bg="white"):
         self.render = self.font.render(text, 1, pygame.Color("Black"))
@@ -31,16 +32,17 @@ class Button:
     def show(self):
         self.clicked = False
         display.screen.blit(self.surface, (self.x, self.y))
+        self.change_text(self.text, self.color)
         # pygame.draw.rect(self.surface, (255, 255, 255), self.rect)
 
     def click(self, mouse_click):
         x, y = pygame.mouse.get_pos()
         if self.rect.collidepoint(x, y):
-            self.change_text(self.text, "red")
+            self.color = "red"
             if mouse_click:
                 self.clicked = True
         else:
-            self.change_text(self.text)
+            self.color = "white"
 
     def is_clicked(self):
         return self.clicked
@@ -54,9 +56,12 @@ class MainMenu:
         self.exit_button = Button("EXIT", font,
                                   (400 * scr_w, 200 * scr_h),
                                   (400 * scr_w, 800 * scr_h))
-        self.shop_button = Button("SHOP", font,
+        self.shop_button = Button("CARS", font,
                                   (400 * scr_w, 100 * scr_h),
                                   (1470 * scr_w, 50 * scr_h))
+        self.upgrades_button = Button("SHOP", font,
+                                      (400 * scr_w, 100 * scr_h),
+                                      (30 * scr_w, 50 * scr_h))
         self.logo = logo
         self.bg = bg
         self.enabled = True
@@ -69,10 +74,12 @@ class MainMenu:
         bar.draw_animated_bg()
         self.start_button.show()
         self.exit_button.show()
+        self.shop_button.show()
+        self.upgrades_button.show()
         self.exit_button.click(mouse_click)
         self.start_button.click(mouse_click)
-        self.shop_button.show()
         self.shop_button.click(mouse_click)
+        self.upgrades_button.click(mouse_click)
 
     def update_animation(self):
         pass
@@ -98,9 +105,6 @@ class ShopMenu:
         self.back_button = Button("BACK", font,
                                   (400 * scr_w, 100 * scr_h),
                                   (50 * scr_w, 50 * scr_h))
-        self.buy_button = Button("BUY", font,
-                                 (300 * scr_w, 100 * scr_h),
-                                 (800 * scr_w, 1000 * scr_h))
 
         self.price_list = self.load_price_list()
         self.shop_items = list(self.price_list.keys())
@@ -116,12 +120,10 @@ class ShopMenu:
 
         self.prev_car.show()
         self.next_car.show()
-        self.buy_button.show()
         self.back_button.show()
 
         self.back_button.click(mouse_click)
         self.next_car.click(mouse_click)
-        self.buy_button.click(mouse_click)
         self.prev_car.click(mouse_click)
 
     def change_shop_item(self, destination):
@@ -132,7 +134,8 @@ class ShopMenu:
         if money >= price and not car.bought:
             car.buy()
             return money - price
-        else: return money
+        else:
+            return money
 
     def load_price_list(self):
         with open('storage/prices.json', 'r') as f:
@@ -152,4 +155,53 @@ class ShopMenu:
         self.enabled = True
 
 
+class UpgradesMenu:
+    def __init__(self, scr_w, scr_h, bg, font):
+        self.back_button = Button("BACK", font,
+                                  (400 * scr_w, 100 * scr_h),
+                                  (750 * scr_w, 50 * scr_h))
+        self.upgrade_shield_button = Button("MAX", font,
+                                            (300 * scr_w, 100 * scr_h),
+                                            (300 * scr_w, 700 * scr_h))
+        self.upgrade_health_button = Button("MAX", font,
+                                            (300 * scr_w, 100 * scr_h),
+                                            (900 * scr_w, 700 * scr_h))
+        self.font = font
+        self.bg = bg
+        self.enabled = False
+        self.costs = [200, 200]
 
+    def update_buttons(self):
+        self.upgrade_shield_button.text = str(self.costs[0])
+        self.upgrade_health_button.text = str(self.costs[1])
+
+    def show(self, mouse_click, lvls, money):
+        self.update_buttons()
+        self.costs = [200 * lvls[0], 200 * lvls[1]]
+        scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
+        display.screen.blit(scaled_bg, (0, 0))
+
+        display.draw_text(str(lvls[0]), self.font, (255, 255, 255), 400, 600)
+        display.draw_text(str(lvls[1]), self.font, (255, 255, 255), 1000, 600)
+        self.back_button.show()
+        self.upgrade_shield_button.show()
+        self.upgrade_health_button.show()
+
+        self.back_button.click(mouse_click)
+        if not lvls[0] > 9 and money >= self.costs[0]:
+            self.upgrade_shield_button.click(mouse_click)
+        elif lvls[0] > 9:
+            self.upgrade_shield_button.change_text("MAX")
+        if not lvls[1] > 9 and money >= self.costs[1]:
+            self.upgrade_health_button.click(mouse_click)
+        elif lvls[1] > 9:
+            self.upgrade_health_button.change_text("MAX")
+
+    def is_enabled(self):
+        return self.enabled
+
+    def disable(self):
+        self.enabled = False
+
+    def enable(self):
+        self.enabled = True

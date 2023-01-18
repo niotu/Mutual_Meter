@@ -35,6 +35,12 @@ class Storage:
     def get_bought_cars(self):
         return self.bought_cars
 
+    def get_upgrades_levels(self):
+        return self.storage["booster_levels"]
+
+    def get_upgrades_params(self):
+        return self.storage["booster_stats"]
+
     def get_storage(self):
         return self.storage
 
@@ -52,10 +58,12 @@ class Storage:
     def set_bought_cars(self, bought_cars):
         self.bought_cars = bought_cars
 
-    def save_data(self, highest_score, money, bought_cars):
+    def save_data(self, highest_score, money, upgrades_levels, uprades_stats):
         self.storage['highest_score'] = highest_score
         self.storage['money'] = money
-        self.storage['bought_cars'] = bought_cars
+        self.storage["bought_cars"] = self.bought_cars
+        self.storage["booster_levels"] = upgrades_levels
+        self.storage["booster_stats"] = uprades_stats
 
         with open('storage/scores.json', 'w', encoding='utf-8') as scores:
             json.dump(self.storage, scores)

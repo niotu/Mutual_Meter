@@ -6,7 +6,6 @@ SCREEN_WIDTH = screen_width / 1920
 SCREEN_HEIGHT = screen_height / 1080
 
 SPEED = 20
-HEALTH = 100
 
 CAR_SIZE = 83
 CAR_SCALE = 7.1 * SCREEN_WIDTH

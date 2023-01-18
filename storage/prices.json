@@ -1,4 +1,6 @@
 {
-  "red_car": 0,
-  "police_car": 200
+  "red_car": [0, 1],
+  "police_car": [200, 0],
+  "grey_car": [1000, 0],
+  "green_car": [2500, 0]
 }

@@ -29,6 +29,7 @@ class Road:
         self.level = 1
 
     def update_obstacles(self):
+        # нарисовать препятствия сверху экрана
         match random.choice((1, 2, 3)):
             case 1:
                 sheet = self.sheet_list[0]
@@ -65,10 +66,10 @@ class Road:
         for i in self.line2_list:
             i.move(self.speed)
             i.draw(self.display.screen)
+        # проверка на новый уровень
         if score % 1000 == 0:
             self.level += 1
             self.new_level = True
-            print(score // 10, self.level)
         # Нарисовать препятствия
         if self.obstacle1.rect.top < self.display.screen_height:
             if self.obstacle2:
@@ -169,8 +170,10 @@ class Booster(Obstacles):
                 self.hit = True
                 match self.type:
                     case 1:
-                        if self.target.health != 100:
+                        if self.target.health + 20 < self.target.max_health:
                             self.target.health += 20
+                        else:
+                            self.target.health = self.target.max_health
                     case 2:
                         self.target.hit_cooldown = 200
 
