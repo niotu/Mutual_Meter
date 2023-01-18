@@ -4,10 +4,10 @@ from const.CONSTANTS import *
 
 
 class Car:
-    def __init__(self, display, data, skin, bought):
+    def __init__(self, display, data, skin, bought, max_health):
         link = TAGS_TO_LINKS[skin]
         self.sprite_sheet = pygame.image.load(link).convert_alpha()
-        self.health = HEALTH
+        self.health = max_health
         self.size, self.image_scale, self.offset, self.animation_steps = data[0], data[1], data[2], data[3]
         self.animation_list = self.load_images(self.sprite_sheet, self.animation_steps)
         self.action = 0  # 0 - idle, 1 - hit
@@ -16,18 +16,18 @@ class Car:
         self.update_time = pygame.time.get_ticks()
         self.hit = False
         self.moving = False
-        self.bought = bought
         self.alive = True
         self.rect = pygame.Rect((880 * SCREEN_WIDTH, 700 * SCREEN_HEIGHT, 150 * SCREEN_WIDTH, 200 * SCREEN_HEIGHT))
         self.display = display
         self.hit_cooldown = 0
         self.column = 0
         self.direction = 0
+        self.max_health = max_health
 
     def buy(self):
-        self.bought = True
+        pass
 
-    def move(self):
+    def move(self, shield_speed):
         dx = 0
         key = pygame.key.get_pressed()
         if not self.moving:
@@ -54,7 +54,7 @@ class Car:
                 self.moving = False
 
         if self.hit_cooldown > 0:
-            self.hit_cooldown -= 1
+            self.hit_cooldown -= shield_speed
         # check if player alive
         if self.health <= 0:
             self.alive = False
@@ -62,13 +62,14 @@ class Car:
     def change_skin(self, skin):
         link = TAGS_TO_LINKS[skin]
         self.sprite_sheet = pygame.image.load(link).convert_alpha()
-        self.animation_list=self.load_images(self.sprite_sheet, self.animation_steps)
-
+        self.animation_list = self.load_images(self.sprite_sheet, self.animation_steps)
 
     def revive(self):
+        # восстановить параметры игрока
         self.rect = pygame.Rect((880 * SCREEN_WIDTH, 700 * SCREEN_HEIGHT, 150 * SCREEN_WIDTH, 200 * SCREEN_HEIGHT))
         self.action = 0
-        self.health = 100
+        self.health = self.max_health
+        self.hit = False
         self.alive = True
         self.hit_cooldown = 0
         self.column = 0
