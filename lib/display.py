@@ -52,10 +52,10 @@ class Display:
         img = pygame.transform.scale(heart_sprite, (50, 50))
         self.screen.blit(img, (10, 16))
 
-    def draw_hit_cooldown(self, hit_colodown, shield_sprite):
+    def draw_hit_cooldown(self, hit_colodown, shield_sprite, y, color):
         img = pygame.transform.scale(shield_sprite, (45, 45))
-        self.screen.blit(img, (10, 56))
-        pygame.draw.rect(self.screen, (23, 51, 250), (65, 60, hit_colodown, 30))
+        self.screen.blit(img, (10, y - 4))
+        pygame.draw.rect(self.screen, color, (65, y, hit_colodown, 30))
 
     def draw_image(self, image, size, coords):
         img = pygame.transform.scale(image, size)

@@ -166,40 +166,54 @@ class UpgradesMenu:
         self.upgrade_health_button = Button("MAX", font,
                                             (300 * scr_w, 100 * scr_h),
                                             (900 * scr_w, 700 * scr_h))
+        self.upgrade_money_button = Button("MAX", font,
+                                           (300 * scr_w, 100 * scr_h),
+                                           (1480 * scr_w, 700 * scr_h))
         self.font = font
         self.bg = bg
         self.enabled = False
-        self.costs = [200, 200]
+        self.costs = [200, 200, 200]
 
     def update_buttons(self):
         self.upgrade_shield_button.text = str(self.costs[0])
         self.upgrade_health_button.text = str(self.costs[1])
+        self.upgrade_money_button.text = str(self.costs[2])
 
     def show(self, mouse_click, lvls, money):
         self.update_buttons()
-        self.costs = [200 * lvls[0], 200 * lvls[1]]
+        self.costs = [200 * lvls[0], 200 * lvls[1], 200 * lvls[2]]
         scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
         display.screen.blit(scaled_bg, (0, 0))
-
+        display.draw_text(f"{round(money)}$", self.font, (255, 255, 255), 810 * display.scr_w,
+                          300 * display.scr_h)
         display.draw_text(str(lvls[0]), self.font, (255, 255, 255), 400, 600)
         display.draw_text(str(lvls[1]), self.font, (255, 255, 255), 1000, 600)
+        display.draw_text(str(lvls[2]), self.font, (255, 255, 255), 1580, 600)
         self.back_button.show()
         self.upgrade_shield_button.show()
         self.upgrade_health_button.show()
+        self.upgrade_money_button.show()
 
         self.back_button.click(mouse_click)
-        if money < self.costs[0]:
-            self.upgrade_shield_button.change_text(self.upgrade_shield_button.text, "white")
-        elif lvls[0] > 9:
+        if lvls[0] > 9:
             self.upgrade_shield_button.change_text("MAX")
+        elif money < self.costs[0]:
+            self.upgrade_shield_button.change_text(self.upgrade_shield_button.text, "white")
         else:
             self.upgrade_shield_button.click(mouse_click)
-        if money < self.costs[1]:
-            self.upgrade_health_button.change_text(self.upgrade_health_button.text, "white")
-        elif lvls[1] > 9:
+        if lvls[1] > 9:
             self.upgrade_health_button.change_text("MAX")
+        elif money < self.costs[1]:
+            self.upgrade_health_button.change_text(self.upgrade_health_button.text, "white")
         else:
             self.upgrade_health_button.click(mouse_click)
+        if lvls[2] > 9:
+            self.upgrade_money_button.change_text("MAX")
+        elif money < self.costs[2]:
+            self.upgrade_money_button.change_text(self.upgrade_money_button.text, "white")
+
+        else:
+            self.upgrade_money_button.click(mouse_click)
 
     def is_enabled(self):
         return self.enabled

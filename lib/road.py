@@ -41,8 +41,8 @@ class Road:
                 booster_sheet = self.booster_sheets[1]
             case _:
                 sheet = self.sheet_list[2]
-                booster_type = 1
-                booster_sheet = self.booster_sheets[0]
+                booster_type = 3
+                booster_sheet = self.booster_sheets[2]
         line_list = [int(560 * SCREEN_WIDTH), int(870 * SCREEN_WIDTH),
                      int(1170 * SCREEN_WIDTH)]
         x1 = random.choice(line_list)
@@ -176,6 +176,8 @@ class Booster(Obstacles):
                             self.target.health = self.target.max_health
                     case 2:
                         self.target.hit_cooldown = 200
+                    case 3:
+                        self.target.double_money_cooldown = 200
 
 
 class RoadLine:
