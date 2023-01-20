@@ -20,6 +20,7 @@ class Car:
         self.rect = pygame.Rect((880 * SCREEN_WIDTH, 700 * SCREEN_HEIGHT, 150 * SCREEN_WIDTH, 200 * SCREEN_HEIGHT))
         self.display = display
         self.hit_cooldown = 0
+        self.double_money_cooldown = 0
         self.column = 0
         self.direction = 0
         self.max_health = max_health
@@ -27,7 +28,7 @@ class Car:
     def buy(self):
         pass
 
-    def move(self, shield_speed):
+    def move(self, shield_speed, money_speed):
         dx = 0
         key = pygame.key.get_pressed()
         if not self.moving:
@@ -55,6 +56,8 @@ class Car:
 
         if self.hit_cooldown > 0:
             self.hit_cooldown -= shield_speed
+        if self.double_money_cooldown > 0:
+            self.double_money_cooldown -= money_speed
         # check if player alive
         if self.health <= 0:
             self.alive = False
@@ -72,6 +75,7 @@ class Car:
         self.hit = False
         self.alive = True
         self.hit_cooldown = 0
+        self.double_money_cooldown = 0
         self.column = 0
         self.direction = 0
 
