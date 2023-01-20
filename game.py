@@ -1,14 +1,12 @@
 import pygame
-from pygame import mixer
-
 from const.CONSTANTS import *
 from lib.Car import Car
 from lib.Menu import MainMenu, ShopMenu, Button, UpgradesMenu
 from lib.clock import Clock
 from lib.display import Display
-# from lib.draw import draw_bg, draw_text, draw_health_bar
 from lib.road import Road
 from lib.storage import Storage
+import lib.mixer as audio
 
 
 class Game:
@@ -20,7 +18,6 @@ class Game:
         # Загрузка клока
         self.clocks = Clock()
         self.storage = Storage()
-
         # Загрузка картинок
         self.bg_road = pygame.image.load(r"assets\images\backgrounds\road.png").convert_alpha()
         self.logo = pygame.image.load(r"assets\images\mutual_meter.png").convert_alpha()
@@ -73,13 +70,8 @@ class Game:
                                   self.player)
         self.upgrades_menu = UpgradesMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font)
         self.exit_button = Button('Exit', self.font, (300, 100), (1500, 100))
-
-    # метод для проигрывания музыки
-    def play_music_bg(self, music_bg):
-        mixer.stop()
-        mixer.music.load(music_bg)
-        mixer.music.set_volume(0.2)
-        mixer.music.play(-1)
+        # play music
+        audio.play_music(audio.menu_music)
 
     def restart_round(self):
         # sheet = self.player.sprite_sheet
@@ -88,9 +80,11 @@ class Game:
         self.money = round(self.money)
         self.score = 0
         self.score_speed = 1
+        self.level_score = 0
         self.player.revive()
         self.road = Road(self.display, self.player, (self.obstacles_sheets, self.boosters_sheets),
                          [CAR_DATA, CAR_DATA, CAR_DATA])
+        audio.play_music(audio.menu_music)
 
     def drive(self, car, mouse_click):
         doubler = 1
@@ -103,7 +97,7 @@ class Game:
                                150 * SCREEN_HEIGHT)
         self.display.draw_text(f"SCORE: {self.score // 10}", self.font, (255, 255, 255), 50 * SCREEN_WIDTH,
                                200 * SCREEN_HEIGHT)
-        if self.score // 10 <= self.highest_score:
+        if (self.highest_score - self.score // 10) > 0:
             self.display.draw_text(f"HIGHEST IN: {self.highest_score - self.score // 10}", self.small_font,
                                    (255, 255, 255),
                                    50 * SCREEN_WIDTH,
@@ -140,14 +134,16 @@ class Game:
     def game_navigation(self, mouse_click):
         if self.game_menu.is_enabled():
             self.game_menu.show(mouse_click)
-            self.display.draw_text(f"HIGHEST SCORE: {self.highest_score}", self.font, (255, 255, 255),
-                                   650 * SCREEN_WIDTH,
-                                   520 * SCREEN_HEIGHT)
+            if self.highest_score != 0:
+                self.display.draw_text(f"HIGHEST SCORE: {self.highest_score}", self.font, (255, 255, 255),
+                                       650 * SCREEN_WIDTH,
+                                       520 * SCREEN_HEIGHT)
             if self.game_menu.exit_button.is_clicked():
                 self.application_run = False
             if self.game_menu.start_button.is_clicked():
                 self.game_menu.disable()
                 self.game_on = True
+                audio.play_music(audio.game_music)
             if self.game_menu.shop_button.is_clicked():
                 self.shop_menu.enable()
                 self.game_menu.disable()

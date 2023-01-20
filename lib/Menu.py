@@ -3,6 +3,7 @@ import json
 import pygame
 from lib.video_reader import VideoReader
 from lib.display import Display
+from lib.mixer import button_sound
 
 display = Display()
 bar = VideoReader(r"assets\video\bar2.mp4")
@@ -41,6 +42,7 @@ class Button:
             self.color = "red"
             if mouse_click:
                 self.clicked = True
+                pygame.mixer.Sound.play(button_sound)
         else:
             self.color = "white"
 
