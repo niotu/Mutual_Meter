@@ -1,7 +1,7 @@
 import pygame
 from const.CONSTANTS import *
 from lib.Car import Car
-from lib.Menu import MainMenu, ShopMenu, Button, UpgradesMenu
+from lib.Menu import MainMenu, ShopMenu, Button, UpgradesMenu, GameOverMenu
 from lib.clock import Clock
 from lib.display import Display
 from lib.road import Road
@@ -20,6 +20,7 @@ class Game:
         self.storage = Storage()
         # Загрузка картинок
         self.bg_road = pygame.image.load(r"assets\images\backgrounds\road.png").convert_alpha()
+        self.bg_game_over = pygame.image.load(r"assets\images\backgrounds\game_over.png").convert_alpha()
         self.logo = pygame.image.load(r"assets\images\mutual_meter.png").convert_alpha()
         self.red_car_sheet = pygame.image.load(TAGS_TO_LINKS['red_car']).convert_alpha()
         self.police_car_sheet = pygame.image.load(TAGS_TO_LINKS['police_car']).convert_alpha()
@@ -47,9 +48,9 @@ class Game:
 
         self.levels_upgrade = self.storage.get_upgrades_levels()
         self.shield_speed, self.max_health, self.double_money_speed = self.storage.get_upgrades_params()
-
         self.state = 0
         self.score = 0
+        self.round_score = 0
         self.level_score = 0
         self.current_skin_index = self.storage.get_current_car_index()
         self.cars = ['red_car',
@@ -69,6 +70,7 @@ class Game:
         self.shop_menu = ShopMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font, self.bought_cars,
                                   self.player)
         self.upgrades_menu = UpgradesMenu(self.display.scr_w, self.display.scr_h, self.bg_road, self.font)
+        self.game_over_menu = GameOverMenu(self.display.scr_w, self.display.scr_h, self.bg_game_over, self.font)
         self.exit_button = Button('Exit', self.font, (300, 100), (1500, 100))
         # play music
         audio.play_music(audio.menu_music)
@@ -78,6 +80,7 @@ class Game:
         if self.highest_score < self.score // 10:
             self.highest_score = self.score // 10
         self.money = round(self.money)
+        self.round_score = self.score // 10
         self.score = 0
         self.score_speed = 1
         self.level_score = 0
@@ -115,7 +118,7 @@ class Game:
                 self.score_speed += 1
         elif not self.player.alive:
             self.game_on = False
-            self.game_menu.enable()
+            self.game_over_menu.enable()
             self.restart_round()
 
         # draw player
@@ -188,6 +191,26 @@ class Game:
                 self.levels_upgrade[2] += 1
                 self.double_money_speed -= 0.075
                 self.money -= self.upgrades_menu.costs[2]
+        if self.game_over_menu.is_enabled():
+            self.game_over_menu.show(mouse_click)
+            if self.round_score >= self.highest_score:
+                self.display.draw_text(f"NEW BEST!", self.font, (255, 255, 255),
+                                       650 * SCREEN_WIDTH,
+                                       390 * SCREEN_HEIGHT)
+            self.display.draw_text(f"HIGHEST SCORE: {self.highest_score}", self.font, (255, 255, 255),
+                                   650 * SCREEN_WIDTH,
+                                   440 * SCREEN_HEIGHT)
+            self.display.draw_text(f"SCORE: {self.round_score}", self.font, (255, 255, 255),
+                                   650 * SCREEN_WIDTH,
+                                   490 * SCREEN_HEIGHT)
+            self.display.draw_text(f"{round(self.money)}$", self.font, (255, 255, 255),
+                                   650 * SCREEN_WIDTH,
+                                   540 * SCREEN_HEIGHT)
+
+            if self.game_over_menu.exit_button.is_clicked():
+                self.game_over_menu.disable()
+                self.game_menu.enable()
+
         if self.game_on:
             if self.exit_button.is_clicked():
                 self.game_on = False

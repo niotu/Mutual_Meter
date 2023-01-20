@@ -6,10 +6,10 @@ from const.CONSTANTS import *
 class Display:
     def __init__(self):
         # Нативное разрешение пользователя
-        self.screen_width = windll.user32.GetSystemMetrics(0)
-        self.screen_height = windll.user32.GetSystemMetrics(1)
-        # self.screen_width = 1600
-        # self.screen_height = 900
+        # self.screen_width = windll.user32.GetSystemMetrics(0)
+        # self.screen_height = windll.user32.GetSystemMetrics(1)
+        self.screen_width = 1920
+        self.screen_height = 1080
 
         # Разрешение экрана для pygame
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))

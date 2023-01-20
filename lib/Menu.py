@@ -225,3 +225,30 @@ class UpgradesMenu:
 
     def enable(self):
         self.enabled = True
+
+
+class GameOverMenu:
+    def __init__(self, scr_w, scr_h, bg, font):
+        self.exit_button = Button("MENU", font,
+                                  (450 * scr_w, 100 * scr_h),
+                                  (750 * scr_w, 850 * scr_h))
+        self.bg = bg
+        self.enabled = False
+
+    def show(self, mouse_click):
+        scaled_bg = pygame.transform.scale(self.bg, (display.screen_width, display.screen_height))
+        display.screen.blit(scaled_bg, (0, 0))
+        self.exit_button.show()
+        self.exit_button.click(mouse_click)
+
+    def update_animation(self):
+        pass
+
+    def is_enabled(self):
+        return self.enabled
+
+    def disable(self):
+        self.enabled = False
+
+    def enable(self):
+        self.enabled = True
