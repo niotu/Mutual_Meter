@@ -3,6 +3,7 @@ import random
 import pygame
 
 from const.CONSTANTS import *
+import lib.mixer as sound
 
 
 class Road:
@@ -109,6 +110,7 @@ class Obstacles:
         if self.target.alive:
             self.rect.y += speed
             if self.target.rect.colliderect(self.rect) and self.target.hit_cooldown <= 0:
+                pygame.mixer.Sound.play(random.choice(sound.crash_sounds))
                 self.target.hit = True
                 self.hit = True
                 self.target.health -= 20
@@ -168,6 +170,7 @@ class Booster(Obstacles):
             self.rect.y += speed
             if self.target.rect.colliderect(self.rect) and self.hit is False:
                 self.hit = True
+                pygame.mixer.Sound.play(sound.powerup_sound)
                 match self.type:
                     case 1:
                         if self.target.health + 20 < self.target.max_health:

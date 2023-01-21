@@ -51,7 +51,7 @@ class Car:
                 case 1:
                     dx = SPEED
             self.rect.x += dx
-            if self.rect.x == (880 + 300 * self.column) * SCREEN_WIDTH:
+            if self.rect.x == (880 * SCREEN_WIDTH + 300 * SCREEN_WIDTH * self.column):
                 self.moving = False
 
         if self.hit_cooldown > 0:
