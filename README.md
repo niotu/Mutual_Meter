@@ -6,6 +6,21 @@
 
 # Gameplay:
 
-[gameplay.mp4](presentation_files/gameplay.mp4)
+![gameplay.gif](presentation_files\gameplay.gif)
+___
+# Technologies:
+* ### pygame
+* ### json
+* ### python 3.10
 
+# Description:
 
+    In the game you will play for a guy who ride some cars and dodging some obstales.
+    
+___
+
+    You can gather power-ups for getting any buffs like shield or heal.
+
+___
+
+    You can improve these power-ups by the coins which you have to grab while the playing
