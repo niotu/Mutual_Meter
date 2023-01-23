@@ -6,7 +6,7 @@
 
 # Gameplay:
 
-![gameplay.gif](presentation_files\gameplay.gif)
+![gameplay.gif](presentation_files/gameplay.gif)
 
 
 # Technologies:
