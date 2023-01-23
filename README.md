@@ -25,3 +25,5 @@
 <a></a>
 
     You can improve these power-ups by the coins which you have to grab while the playing
+
+### You can download it by zip file via the <a href="https://github.com/niotu/Mutual_Meter/releases/download/v1.0.3/Mutual_Meter_game.zip">link</a>
